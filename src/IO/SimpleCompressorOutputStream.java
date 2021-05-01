@@ -19,14 +19,14 @@ public class SimpleCompressorOutputStream extends OutputStream {
     public void write(byte[] b) throws IOException {
         int index=0;
         byte counter1=-127,counter0=-127;
-        while (b[index] != -2) {
-            if (b[index] == -1){
-                index++;
-                continue;
-            }
-            write(b[index]);
-            index++;
-        }
+//        while (b[index] != -2) {
+//            if (b[index] == -1){
+//                index++;
+//                continue;
+//            }
+//            write(b[index]);
+//            index++;
+//        }
 
         int index2 = 0;
         String x = "";
@@ -41,6 +41,12 @@ public class SimpleCompressorOutputStream extends OutputStream {
             index2++;
         }
         int row = Integer.parseInt(x), column = Integer.parseInt(y);
+
+        while (b[index] != -2) {
+            write(b[index]);
+            index++;
+        }
+
 
         index++;
         for (int i=0; i< row; i++){
