@@ -31,7 +31,8 @@ public class Maze {
             index++;
         }
         index++;
-        matrix = new int[Integer.parseInt(x)][Integer.parseInt(y)];
+        int row = Integer.parseInt(x), column = Integer.parseInt(y);
+        matrix = new int[row][column];
         x = "";
         y = "";
 
@@ -61,23 +62,14 @@ public class Maze {
             index++;
         }
         index++;
-            exit = new Position(Integer.parseInt(x),Integer.parseInt(y));
-        int rIndex = 0; //row index
-        int cIndex = 0; //column index
-        while(index<list.length){
-            if (list[index] == -2) {
-                index++;
-                continue;
-            }
-            cIndex = 0;
-            while(index<list.length && list[index] != -2){
-                matrix[rIndex][cIndex] = list[index];
-                index++;
-                cIndex++;
-            }
-            rIndex++;
-        }
+        exit = new Position(Integer.parseInt(x),Integer.parseInt(y));
 
+        for(int i=0; i< row; i++){
+            for (int j=0 ; j< column;j++){
+                matrix[i][j] = list[index];
+                index++;
+            }
+        }
     }
 
     public int[][] getMatrix() {
@@ -135,33 +127,40 @@ public class Maze {
         String exitY = String.valueOf(exit.y);
         String row = String.valueOf(matrix.length);
         String column = String.valueOf(matrix[0].length);
-        byte[] list = new byte[matrix.length * matrix[0].length + matrix.length + entranceX.length() + entranceY.length() + exitX.length() + exitY.length() + row.length() + column.length() + 5];
+        byte[] list = new byte[matrix.length * matrix[0].length + entranceX.length() + entranceY.length() + exitX.length() + exitY.length() + row.length() + column.length() + 6];
         int counter = 0;
+
         addUp(row,list,counter);
         counter += row.length();
         list[counter] = -1;
         counter++;
+
         addUp(column,list,counter);
         counter += column.length();
         list[counter] = -1;
         counter++;
+
         addUp(entranceX, list, counter);
         counter += entranceX.length();
         list[counter] = -1;
         counter++;
+
         addUp(entranceY, list, counter);
         counter += entranceY.length();
         list[counter] = -1;
         counter++;
+
         addUp(exitX, list, counter);
         counter += exitX.length();
         list[counter] = -1;
         counter++;
+
         addUp(exitY, list, counter);
         counter += exitY.length();
+        list[counter] = -2;
+        counter++;
+
         for (int i = 0; i < matrix.length; i++) {
-            list[counter] = -2;
-            counter++;
             for (int j = 0; j < matrix.length; j++) {
                 list[counter] = (byte) matrix[i][j];
                 counter++;
@@ -170,6 +169,19 @@ public class Maze {
         return list;
     }
 
+
+    public static void main(String[] args) {
+
+        IMazeGenerator mg = new MyMazeGenerator();
+        Maze maze = mg.generate(10, 10);
+
+        byte[] list = maze.toByteArray();
+
+        Maze mazi = new Maze(list);
+
+        maze.print();
+        mazi.print();
+    }
 
 
     /*

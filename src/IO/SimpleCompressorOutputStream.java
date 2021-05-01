@@ -28,9 +28,23 @@ public class SimpleCompressorOutputStream extends OutputStream {
             index++;
         }
 
+        int index2 = 0;
+        String x = "";
+        String y = "";
+        while(b[index2] != -1){
+            x += b[index2];
+            index2++;
+        }
+        index2++;
+        while(b[index2] != -1){
+            y += b[index2];
+            index2++;
+        }
+        int row = Integer.parseInt(x), column = Integer.parseInt(y);
+
         index++;
-        while(index<b.length){ //start from 0's
-            while(b[index] != -2){
+        for (int i=0; i< row; i++){
+            for (int j=0 ; j < column ; j++){
                 while(b[index]==0) {
                     if(counter0==127) {
                         index++;
