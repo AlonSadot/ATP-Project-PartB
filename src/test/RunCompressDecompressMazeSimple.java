@@ -7,18 +7,20 @@ import algorithms.mazeGenerators.MyMazeGenerator;
 import java.io.*;
 import java.util.Arrays;
 
-public class RunCompressDecompressMaze {
+public class RunCompressDecompressMazeSimple {
     public static void main(String[] args) { String mazeFileName = "savedMaze.maze";
         AMazeGenerator mazeGenerator = new MyMazeGenerator();
         Maze maze = mazeGenerator.generate(100, 100); //Generate new maze
         try {
 // save maze to a file
             OutputStream out = new SimpleCompressorOutputStream(new FileOutputStream(mazeFileName));
-            out.write(maze.toByteArray()); out.flush();
+            out.write(maze.toByteArray());
+            out.flush();
             out.close();
         } catch (IOException e) { e.printStackTrace();
         }
-        byte savedMazeBytes[] = new byte[0]; try {
+        byte savedMazeBytes[] = new byte[0];
+        try {
 //read maze from file
             InputStream in = new SimpleDecompressorInputStream(new
                     FileInputStream(mazeFileName));
