@@ -37,28 +37,16 @@ public class Server {
             while (!stop) {
                 try {
                     Socket clientSocket = serverSocket.accept();
-                    //LOG.info("Client accepted: " + clientSocket.toString());
-
-                    // Insert the new task into the thread pool:
                     threadPool.submit(() -> {
                         ServerStrategy(clientSocket);
                     });
 
-                    // From previous lab:
-                    // This thread will handle the new Client
-                    //new Thread(() -> {
-                    //    handleClient(clientSocket);
-                    //}).start();
-
                 } catch (SocketTimeoutException e){
-                    //LOG.debug("Socket timeout");
                 }
             }
             serverSocket.close();
-            //threadPool.shutdown(); // do not allow any new tasks into the thread pool (not doing anything to the current tasks and running threads)
             threadPool.shutdownNow(); // do not allow any new tasks into the thread pool, and also interrupts all running threads (do not terminate the threads, so if they do not handle interrupts properly, they could never stop...)
         } catch (IOException e) {
-            //LOG.error("IOException", e);
         }
     }
 
