@@ -16,7 +16,7 @@ public class Server {
     private int listeningIntervalMS;
     private IServerStrategy strategy;
     private volatile boolean stop;
-    //private final Logger LOG = LogManager.getLogger(); //Log4j2
+//    private final Logger LOG = LogManager.getLogger(); //Log4j2
     private ExecutorService threadPool; // Thread pool
 
 
@@ -24,7 +24,7 @@ public class Server {
         this.port = port;
         this.listeningIntervalMS = listeningIntervalMS;
         this.strategy = strategy;
-        // initialize a new fixed thread pool with 2 threads:
+ //        initialize a new fixed thread pool with 2 threads:
         this.threadPool = Executors.newFixedThreadPool(2);
     }
 
@@ -32,36 +32,48 @@ public class Server {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             serverSocket.setSoTimeout(listeningIntervalMS);
-            //LOG.info("Starting server at port = " + port);
+//            LOG.info("Starting server at port = " + port);
 
             while (!stop) {
                 try {
                     Socket clientSocket = serverSocket.accept();
+                   // LOG.info("Client accepted: " + clientSocket.toString());
+
+                    // Insert the new task into the thread pool:
                     threadPool.submit(() -> {
                         ServerStrategy(clientSocket);
                     });
 
+                    // From previous lab:
+                    // This thread will handle the new Client
+                    //new Thread(() -> {
+                    //    handleClient(clientSocket);
+                    //}).start();
+
                 } catch (SocketTimeoutException e){
+                   // LOG.debug("Socket timeout");
                 }
             }
             serverSocket.close();
+            //threadPool.shutdown(); // do not allow any new tasks into the thread pool (not doing anything to the current tasks and running threads)
             threadPool.shutdownNow(); // do not allow any new tasks into the thread pool, and also interrupts all running threads (do not terminate the threads, so if they do not handle interrupts properly, they could never stop...)
         } catch (IOException e) {
+           // LOG.error("IOException", e);
         }
     }
 
     private void ServerStrategy(Socket clientSocket) {
         try {
             strategy.applyStrategy(clientSocket.getInputStream(), clientSocket.getOutputStream());
-            //LOG.info("Done handling client: " + clientSocket.toString());
+           // LOG.info("Done handling client: " + clientSocket.toString());
             clientSocket.close();
         } catch (IOException e){
-            //LOG.error("IOException", e);
+          //  LOG.error("IOException", e);
         }
     }
 
     public void stop(){
-        //LOG.info("Stopping server...");
+       // LOG.info("Stopping server...");
         stop = true;
     }
 }

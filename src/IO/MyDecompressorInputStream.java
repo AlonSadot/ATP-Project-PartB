@@ -27,7 +27,7 @@ public class MyDecompressorInputStream extends InputStream {
         }
         b[index] = list[index];
         index++;
-        int iterator = index , smallCounter =0;
+        int iterator = index;
         String binaryNum;
         while (index < list.length){
             binaryNum = String.format("%" + 7 + "s", Integer.toBinaryString(list[index])).replaceAll(" ", "0");
@@ -35,7 +35,6 @@ public class MyDecompressorInputStream extends InputStream {
             rev.append(binaryNum);
             rev.reverse();
             binaryNum = rev.toString();
-            smallCounter=0;
             for (int i=0 ; i < binaryNum.length() ; i++){
                 if (iterator >= b.length) break;
                 b[iterator] = (byte)(binaryNum.charAt(i) - '0');
