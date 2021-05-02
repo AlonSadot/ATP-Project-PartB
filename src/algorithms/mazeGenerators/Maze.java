@@ -115,8 +115,7 @@ public class Maze {
 
     private void addUp(String num, byte[] list, int counter) {
         for (int i = 0; i < num.length(); i++) {
-            char a = num.charAt(i);
-            list[counter+i] = (byte)(a - '0');
+            list[counter+i] = (byte)( num.charAt(i) - '0');
         }
     }
 
