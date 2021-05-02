@@ -32,7 +32,7 @@ public class SimpleDecompressorInputStream extends InputStream {
         }
         int row = Integer.parseInt(x), column = Integer.parseInt(y);
 
-        while (b[index] != -2) {
+        while (list[index] != -2) {
             b[index] = list[index];
             index++;
         }
@@ -42,6 +42,7 @@ public class SimpleDecompressorInputStream extends InputStream {
 
         while (index<list.length){
             for (countRow = 0;countRow<row;countRow++){
+                countCol = 0;
                 while(countCol<column){
                     num = list[index] + 127;
                     for (int i = 0;i<num;i++){
@@ -50,6 +51,8 @@ public class SimpleDecompressorInputStream extends InputStream {
                         countCol++;
                     }
                     index++;
+                    if (index>=list.length)
+                        continue;
                     num = list[index] + 127;
                     for (int i = 0;i<num;i++){
                         b[index] = 1;

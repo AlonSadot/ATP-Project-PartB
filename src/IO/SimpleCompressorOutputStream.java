@@ -46,11 +46,10 @@ public class SimpleCompressorOutputStream extends OutputStream {
             write(b[index]);
             index++;
         }
-
-
+        write(b[index]);
         index++;
         for (int i=0; i< row; i++){
-            for (int j=0 ; j < column ; j++){
+            //for (int j=0 ; j < column ; j++){
                 while(b[index]==0) {
                     if(counter0==127) {
                         index++;
@@ -70,7 +69,7 @@ public class SimpleCompressorOutputStream extends OutputStream {
                     counter1++;
                     index++;
                 }
-            }
+            //}
             write(counter1);
             counter1=-127;
         }
