@@ -4,6 +4,7 @@ import IO.MyCompressorOutputStream;
 import algorithms.mazeGenerators.*;
 
 import java.io.*;
+import java.nio.file.*;
 
 public class ServerStrategyGenerateMaze implements IServerStrategy {
 
@@ -20,7 +21,13 @@ public class ServerStrategyGenerateMaze implements IServerStrategy {
             OutputStream out = new MyCompressorOutputStream(new FileOutputStream(mazeFileName));
             out.write(m.toByteArray());
             out.flush();
-
+            Path path = Paths.get(mazeFileName);
+            byte[] mazeCompressed = Files.readAllBytes(path);
+            toClient.writeObject(mazeCompressed);
+            toClient.flush();
+            toClient.close();
+            out.close();
+            fromClient.close();
 
         } catch (Exception e) {
             e.printStackTrace();

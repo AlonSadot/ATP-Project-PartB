@@ -24,7 +24,8 @@ public class RunCompressDecompressMazeSimple {
 //read maze from file
             InputStream in = new SimpleDecompressorInputStream(new
                     FileInputStream(mazeFileName));
-            savedMazeBytes = new byte[maze.toByteArray().length]; in.read(savedMazeBytes);
+            savedMazeBytes = new byte[maze.toByteArray().length];
+            in.read(savedMazeBytes);
             in.close();
         } catch (IOException e) { e.printStackTrace();
         }
