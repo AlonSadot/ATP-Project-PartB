@@ -17,4 +17,11 @@ public class Solution implements Serializable {
     public ArrayList<AState> getSolutionPath(){
         return path;
     }
+
+    @Override
+    public String toString() {
+        return "Solution{" +
+                "path=" + path +
+                '}';
+    }
 }
