@@ -43,9 +43,12 @@ public class Server {
                     Socket clientSocket = serverSocket.accept();
                     System.out.println("Client accepted: " + clientSocket.toString());
 
-                    new Thread(() -> {
-                        ServerStrategy(clientSocket);
-                    }).start();
+                    threadPool.submit(() -> {
+                        serverStrategy(clientSocket);
+                    });
+//                    new Thread(() -> {
+//                        ServerStrategy(clientSocket);
+//                    }).start();
 
                 } catch (IOException e) {
                  //   System.out.println("Connection Timed Out");;
@@ -59,7 +62,7 @@ public class Server {
     }
 
 
-    private void ServerStrategy(Socket clientSocket) {
+    private void serverStrategy(Socket clientSocket) {
         try {
             strategy.applyStrategy(clientSocket.getInputStream(), clientSocket.getOutputStream());
             System.out.println("Done handling client: " + clientSocket.toString());
