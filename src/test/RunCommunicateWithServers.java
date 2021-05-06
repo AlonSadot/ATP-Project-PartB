@@ -17,21 +17,23 @@ public class RunCommunicateWithServers {
         Server mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
         Server solveSearchProblemServer = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
         //Server stringReverserServer = new Server(5402, 1000, new ServerStrategyStringReverser());
-
+        System.out.println("Check 1");
         //Starting servers
         solveSearchProblemServer.start();
         mazeGeneratingServer.start();
         //stringReverserServer.start();
-
+        System.out.println("Check 2");
         //Communicating with servers
         CommunicateWithServer_MazeGenerating();
+        System.out.println("Check 3.1");
         CommunicateWithServer_SolveSearchProblem();
         //CommunicateWithServer_StringReverser();
-
+        System.out.println("Check 3.2");
         //Stopping all servers
         mazeGeneratingServer.stop();
         solveSearchProblemServer.stop();
         //stringReverserServer.stop();
+        System.out.println("Check 4");
     }
     private static void CommunicateWithServer_MazeGenerating() {
         try {
@@ -49,14 +51,14 @@ public class RunCommunicateWithServers {
                                 byte[] compressedMaze = (byte[])
                                         fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
                                 InputStream is = new MyDecompressorInputStream(new ByteArrayInputStream(compressedMaze));
-                                byte[] decompressedMaze = new byte[1000 /*CHANGE SIZE ACCORDING TO YOU MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
+                                byte[] decompressedMaze = new byte[10000 /*CHANGE SIZE ACCORDING TO YOU MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
                                 is.read(decompressedMaze); //Fill decompressedMaze with bytes
                                 Maze maze = new Maze(decompressedMaze); maze.print();
                             } catch (Exception e) { e.printStackTrace();
                             }
                         }
                     });
-            client.communicateWithServer();
+                client.communicateWithServer();
         } catch (UnknownHostException e) { e.printStackTrace();
         }
     }

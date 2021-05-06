@@ -1,7 +1,9 @@
 
 package algorithms.mazeGenerators;
 
-public class Maze {
+import java.io.Serializable;
+
+    public class Maze implements Serializable {
     Position entrance;
     Position exit;
     private int[][] matrix;

@@ -3,7 +3,7 @@ package Server;
 import IO.MyCompressorOutputStream;
 import algorithms.mazeGenerators.*;
 import algorithms.search.*;
-
+import java.util.Map;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ServerStrategySolveSearchProblem implements IServerStrategy{
+
     @Override
     public void applyStrategy(InputStream inFromClient, OutputStream outToClient) {
         try {
