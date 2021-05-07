@@ -34,7 +34,6 @@ public class SimpleDecompressorInputStream extends InputStream {
                 iterator++;
             }
             index++;
-            if(index == list.length) break;
             num = list[index] + 127;
             for (int k = 0;k<num;k++){
                 b[iterator] = 1;

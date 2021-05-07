@@ -175,7 +175,7 @@ public class Main {
                 public void clientStrategy(InputStream inFromServer, OutputStream outToServer) {
                     try {
                         total_test++;
-                        int size = (int) (50 * (i+1));
+                        int size =5;
                         ObjectOutputStream toServer = new ObjectOutputStream(outToServer);
                         toServer.flush();
                         int[] mazeDimensions = new int[]{size, size};
@@ -214,7 +214,7 @@ public class Main {
                 public void clientStrategy(InputStream inFromServer, OutputStream outToServer) {
                     try {
                         total_test++;
-                        int size = (int) (50 * (i+1));
+                        int size = 5;
                         ObjectOutputStream toServer = new ObjectOutputStream(outToServer);
                         ObjectInputStream fromServer = new ObjectInputStream(inFromServer);
                         toServer.flush();

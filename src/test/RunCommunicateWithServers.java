@@ -14,8 +14,8 @@ import algorithms.search.Solution;
 public class RunCommunicateWithServers {
     public static void main(String[] args) {
         //Initializing servers
-        Server mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
-        Server solveSearchProblemServer = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
+        Server mazeGeneratingServer = new Server(5400, 4000, new ServerStrategyGenerateMaze());
+        Server solveSearchProblemServer = new Server(5401, 4000, new ServerStrategySolveSearchProblem());
         //Server stringReverserServer = new Server(5402, 1000, new ServerStrategyStringReverser());
         //Starting servers
         solveSearchProblemServer.start();
@@ -41,14 +41,14 @@ public class RunCommunicateWithServers {
                                 ObjectInputStream fromServer = new
                                         ObjectInputStream(inFromServer);
                                 toServer.flush();
-                                int[] mazeDimensions = new int[]{50, 50}; toServer.writeObject(mazeDimensions); //send maze dimensions to server
+                                int[] mazeDimensions = new int[]{1000, 1000}; toServer.writeObject(mazeDimensions); //send maze dimensions to server
                                 toServer.flush();
                                 byte[] compressedMaze = (byte[])
                                         fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
                                 InputStream is = new MyDecompressorInputStream(new ByteArrayInputStream(compressedMaze));
-                                byte[] decompressedMaze = new byte[10000 /*CHANGE SIZE ACCORDING TO YOU MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
+                                byte[] decompressedMaze = new byte[2000000 /*CHANGE SIZE ACCORDING TO YOU MAZE SIZE*/]; //allocating byte[] for the decompressed maze -
                                 is.read(decompressedMaze); //Fill decompressedMaze with bytes
-                                Maze maze = new Maze(decompressedMaze); maze.print();
+                                Maze maze = new Maze(decompressedMaze);
                             } catch (Exception e) { e.printStackTrace();
                             }
                         }
@@ -69,15 +69,14 @@ public class RunCommunicateWithServers {
                                 ObjectInputStream fromServer = new
                                         ObjectInputStream(inFromServer);
                                 toServer.flush();
-                                MyMazeGenerator mg = new MyMazeGenerator(); Maze maze = mg.generate(50, 50); maze.print();
+                                MyMazeGenerator mg = new MyMazeGenerator(); Maze maze = mg.generate(1000, 1000);
                                 toServer.writeObject(maze); //send maze to server
                                 toServer.flush();
                                 Solution mazeSolution = (Solution) fromServer.readObject(); //read generated maze (compressed with MyCompressor) from server
                                 //Print Maze Solution retrieved from the server
-                                System.out.println(String.format("Solution steps:%s", mazeSolution));
+                                //System.out.println(String.format("Solution steps:%s", mazeSolution));
                                 ArrayList<AState> mazeSolutionSteps = mazeSolution.getSolutionPath();
-                                for (int i = 0; i < mazeSolutionSteps.size(); i++) { System.out.println(String.format("%s. %s", i, mazeSolutionSteps.get(i).toString()));
-                                }
+                                //for (int i = 0; i < mazeSolutionSteps.size(); i++) { System.out.println(String.format("%s. %s", i, mazeSolutionSteps.get(i).toString())); }
                             } catch (Exception e) { e.printStackTrace();
                             }
                         }

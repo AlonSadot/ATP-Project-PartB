@@ -28,7 +28,6 @@ public class SimpleCompressorOutputStream extends OutputStream {
         while (index < b.length) {
             while(b[index]==0) {
                 if(counter0==127) {
-                    index++;
                     break;
                 }
                 counter0++;
@@ -37,11 +36,8 @@ public class SimpleCompressorOutputStream extends OutputStream {
             }
             write(counter0);
             counter0=-127;
-            if (index == b.length)
-                break;
             while(b[index]==1) {
                 if (counter1 == 127) {
-                    index++;
                     break;
                 }
                 counter1++;

@@ -20,8 +20,6 @@ public class Solution implements Serializable {
 
     @Override
     public String toString() {
-        return "Solution{" +
-                "path=" + path +
-                '}';
+        return "Solution:"+path;
     }
 }
