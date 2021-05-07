@@ -14,8 +14,8 @@ import algorithms.search.Solution;
 public class RunCommunicateWithServers {
     public static void main(String[] args) {
         //Initializing servers
-        Server mazeGeneratingServer = new Server(5400, 4000, new ServerStrategyGenerateMaze());
-        Server solveSearchProblemServer = new Server(5401, 4000, new ServerStrategySolveSearchProblem());
+        Server mazeGeneratingServer = new Server(5400, 1000, new ServerStrategyGenerateMaze());
+        Server solveSearchProblemServer = new Server(5401, 1000, new ServerStrategySolveSearchProblem());
         //Server stringReverserServer = new Server(5402, 1000, new ServerStrategyStringReverser());
         //Starting servers
         solveSearchProblemServer.start();
@@ -30,6 +30,7 @@ public class RunCommunicateWithServers {
         solveSearchProblemServer.stop();
         //stringReverserServer.stop();
     }
+
     private static void CommunicateWithServer_MazeGenerating() {
         try {
             Client client = new Client(InetAddress.getLocalHost(), 5400, new IClientStrategy() {
