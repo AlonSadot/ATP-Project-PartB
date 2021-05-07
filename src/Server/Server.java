@@ -23,7 +23,7 @@ public class Server {
         this.listeningIntervalMS = listeningIntervalMS;
         this.strategy = strategy;
 
-        this.threadPool = Executors.newFixedThreadPool(10);
+        this.threadPool = Executors.newFixedThreadPool(2);
     }
 
     public void start(){
@@ -43,7 +43,7 @@ public class Server {
                         serverStrategy(clientSocket); });
                 }
                 catch (IOException e) {
-                    //System.out.println("Connection Timed Out");;
+                    System.out.println("Connection Timed Out");;
                 }
             }
             serverSocket.close();
