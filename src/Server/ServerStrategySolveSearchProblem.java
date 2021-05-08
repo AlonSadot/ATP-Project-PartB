@@ -17,8 +17,11 @@ import java.nio.file.Paths;
 
 public class ServerStrategySolveSearchProblem implements IServerStrategy{
 
+    /**
+     * server strategy that gets a maze and returns to the client a solution for said maze
+     */
     @Override
-    public void applyStrategy(InputStream inFromClient, OutputStream outToClient) {
+    public void ServerStrategy(InputStream inFromClient, OutputStream outToClient) {
         try {
             ObjectInputStream fromClient = new ObjectInputStream(inFromClient);
             ObjectOutputStream toClient = new ObjectOutputStream(outToClient);
@@ -30,13 +33,26 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
             for (int i=0 ; i <list.length; i++)
                 if (list[i] == 1) ones++;
 
-            String savedPath =mazeExists((String.valueOf(ones)),list);
+            OutputStream out = new MyCompressorOutputStream(new FileOutputStream("savedMaze.maze"));
+            out.write(list);
+            out.flush();
+            Path path = Paths.get("savedMaze.maze");
+
+            String savedPath =mazeExists((String.valueOf(ones)),Files.readAllBytes(path));
             if (savedPath != null){
                 solved = getSolution(savedPath);
             }
             else{
-                ASearchingAlgorithm search = new BreadthFirstSearch(); // need to change through configuration file
-                solved = search.solve(sMaze);
+                Configurations conf = Configurations.getInstance();
+                String search = conf.getProperty("mazeSearchingAlgorithm");
+                ASearchingAlgorithm searchingAlg;
+                if (search.equals("Breadth")) // solves via the algorithm that is written in the configuration file
+                    searchingAlg = new BreadthFirstSearch();
+                else if (search.equals("DFS"))
+                    searchingAlg = new DepthFirstSearch();
+                else
+                    searchingAlg = new BestFirstSearch();
+                solved = searchingAlg.solve(sMaze);
                 saveMaze(solved,list,ones);
             }
             toClient.writeObject(solved);
@@ -49,6 +65,12 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
         }
     }
 
+    /**
+     * @param solved solution to save
+     * @param list byte array
+     * @param ones number of ones in the maze
+     * saves the maze and his solution
+     */
     private static void saveMaze(Solution solved, byte[] list,int ones) {
         try {
             File theDir = new File("Solved_Mazes");
@@ -73,6 +95,10 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
         }
     }
 
+    /**
+     * @param num number of ones in the maze
+     * @return returns a string that represents the file name
+     */
     private static String checkFile(String num){
         File dir = new File("Solved_Mazes");
         File[] directoryListing = dir.listFiles();
@@ -87,6 +113,12 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
         return num + "_" + Integer.toString(count);
     }
 
+    /**
+     * @param ones amount of ones in the maze
+     * @param list byte array that represents a maze
+     * @return returns the name of the maze if the one already exists, returns null if not
+     * @throws IOException
+     */
     private static String mazeExists(String ones ,byte[] list ) throws IOException {
         File dir = new File("Solved_Mazes");
         File[] directoryListing = dir.listFiles();
@@ -108,12 +140,21 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
         return null;
     }
 
+    /**
+     * @param str string that represents a file name
+     * @return returns a substring
+     */
     private static String cutString(String str){
         int i=0;
         while (str.charAt(i) != '_') i++;
         return str.substring(0,i);
     }
 
+    /**
+     * @param path - a path to a file that holdes the solution
+     * @return - the solution that is saved in the file
+     * @throws IOException
+     */
     private static Solution getSolution(String path) throws IOException {
         String mazeText = readFile("Solved_Mazes/" + "Solution_"  + path + ".txt",StandardCharsets.UTF_8);
         ArrayList<AState> solutionPath = new ArrayList<>();
@@ -146,6 +187,12 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
         return new Solution(solutionPath);
     }
 
+    /**
+     * @param path path to file
+     * @param encoding type of encoding
+     * @return string that is in the file
+     * @throws IOException
+     */
     private static String readFile(String path, Charset encoding) throws IOException
     {
         byte[] encoded = Files.readAllBytes(Paths.get(path));

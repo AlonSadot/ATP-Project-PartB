@@ -17,6 +17,12 @@ public class MyDecompressorInputStream extends InputStream {
         return 0;
     }
 
+    /**
+     * @param b compressed byte array of a maze
+     * @return
+     * @throws IOException
+     * decompressing a byte array
+     */
     @Override
     public int read(byte[] b) throws IOException{
         byte[] list = in.readAllBytes();

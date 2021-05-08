@@ -16,6 +16,11 @@ public class SimpleDecompressorInputStream extends InputStream {
         return 0;
     }
 
+    /**
+     * @param b compressed byte array
+     * @return
+     * @throws IOException
+     */
     @Override
     public int read(byte[] b) throws IOException{
         byte[] list = in.readAllBytes();
@@ -34,6 +39,7 @@ public class SimpleDecompressorInputStream extends InputStream {
                 iterator++;
             }
             index++;
+            if (index >= list.length) break;
             num = list[index] + 127;
             for (int k = 0;k<num;k++){
                 b[iterator] = 1;

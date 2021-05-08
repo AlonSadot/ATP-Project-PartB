@@ -15,6 +15,11 @@ public class MyCompressorOutputStream extends OutputStream {
         out.write((byte)b);
     }
 
+    /**
+     * @param b byte array of a maze
+     * @throws IOException
+     * compresses a byte array by converting binary numbers to decimals
+     */
     @Override
     public void write(byte[] b) throws IOException {
         int index = 0;

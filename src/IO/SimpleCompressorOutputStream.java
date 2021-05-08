@@ -15,6 +15,11 @@ public class SimpleCompressorOutputStream extends OutputStream {
         out.write((byte)b);
     }
 
+    /**
+     * @param b byte array of a maze
+     * @throws IOException
+     * compressing a byte array by counting the number of continues ones and zeros
+     */
     @Override
     public void write(byte[] b) throws IOException {
         int index=0;
@@ -36,6 +41,7 @@ public class SimpleCompressorOutputStream extends OutputStream {
             }
             write(counter0);
             counter0=-127;
+            if (index >= b.length) break;
             while(b[index]==1) {
                 if (counter1 == 127) {
                     break;
