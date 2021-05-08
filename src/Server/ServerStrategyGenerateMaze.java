@@ -9,13 +9,24 @@ import java.nio.file.*;
 public class ServerStrategyGenerateMaze implements IServerStrategy {
 
     @Override
-    public void applyStrategy(InputStream inFromClient, OutputStream outToClient) {
+    public void ServerStrategy(InputStream inFromClient, OutputStream outToClient) {
         try {
             ObjectInputStream fromClient = new ObjectInputStream(inFromClient);
             ObjectOutputStream toClient = new ObjectOutputStream(outToClient);
 
             int[] mazeDimensions = (int[]) fromClient.readObject();
-            AMazeGenerator mmg = new MyMazeGenerator();
+
+            Configurations conf = Configurations.getInstance();
+            String mazeGen = conf.getProperty("mazeGeneratingAlgorithm");
+            AMazeGenerator mmg;
+
+            if (mazeGen.equals("MyGenerator"))
+                mmg = new MyMazeGenerator();
+            else if (mazeGen.equals("Simple"))
+                mmg = new SimpleMazeGenerator();
+            else
+                mmg = new EmptyMazeGenerator();
+
             Maze m = mmg.generate(mazeDimensions[0], mazeDimensions[1]);
             String mazeFileName = "savedMaze.maze";
             OutputStream out = new MyCompressorOutputStream(new FileOutputStream(mazeFileName));

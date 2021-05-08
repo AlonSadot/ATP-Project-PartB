@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 public class ServerStrategySolveSearchProblem implements IServerStrategy{
 
     @Override
-    public void applyStrategy(InputStream inFromClient, OutputStream outToClient) {
+    public void ServerStrategy(InputStream inFromClient, OutputStream outToClient) {
         try {
             ObjectInputStream fromClient = new ObjectInputStream(inFromClient);
             ObjectOutputStream toClient = new ObjectOutputStream(outToClient);
@@ -35,8 +35,17 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
                 solved = getSolution(savedPath);
             }
             else{
-                ASearchingAlgorithm search = new BreadthFirstSearch(); // need to change through configuration file
-                solved = search.solve(sMaze);
+                Configurations conf = Configurations.getInstance();
+                String search = conf.getProperty("mazeSearchingAlgorithm");
+                ASearchingAlgorithm searchingAlg;
+                if (search.equals("Breadth"))
+                    searchingAlg = new BreadthFirstSearch();
+                else if (search.equals("DFS"))
+                    searchingAlg = new DepthFirstSearch();
+                else
+                    searchingAlg = new BestFirstSearch();
+                 // need to change through configuration file
+                solved = searchingAlg.solve(sMaze);
                 saveMaze(solved,list,ones);
             }
             toClient.writeObject(solved);
@@ -154,5 +163,3 @@ public class ServerStrategySolveSearchProblem implements IServerStrategy{
 
 
 }
-
-
